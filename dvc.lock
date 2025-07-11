@@ -1,0 +1,83 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/churn/data_ingestion.py
+    deps:
+    - path: src/churn/data_ingestion.py
+      hash: md5
+      md5: 44d331721f9d826e672cc94e27dcae14
+      size: 3274
+    outs:
+    - path: data/churn/raw
+      hash: md5
+      md5: 7f5730d69b17149e49b4ca255fe782dc.dir
+      size: 553680
+      nfiles: 2
+  feature_engineering:
+    cmd: python src/churn/feature_engineering.py
+    deps:
+    - path: data/churn/raw
+      hash: md5
+      md5: 7f5730d69b17149e49b4ca255fe782dc.dir
+      size: 553680
+      nfiles: 2
+    - path: src/churn/feature_engineering.py
+      hash: md5
+      md5: ddb304a982d5e2f8c3e024d7b82d3a02
+      size: 4002
+    outs:
+    - path: data/churn/features
+      hash: md5
+      md5: ba589e2f5046c8efd1b2d90fe6edf195.dir
+      size: 2580540
+      nfiles: 4
+  train_model:
+    cmd: python src/churn/train_model.py
+    deps:
+    - path: data/churn/features
+      hash: md5
+      md5: ba589e2f5046c8efd1b2d90fe6edf195.dir
+      size: 2580540
+      nfiles: 4
+    - path: src/churn/train_model.py
+      hash: md5
+      md5: 1f762b2b0921500bc66c34041cdce33d
+      size: 4368
+    outs:
+    - path: models
+      hash: md5
+      md5: 953dbc3161c8713a05fdce9707f81fbd.dir
+      size: 5259969
+      nfiles: 1
+  model_evaluation_churn:
+    cmd: python src/churn/model_evaluation.py
+    deps:
+    - path: data/churn/features/X_test.csv
+      hash: md5
+      md5: f1d50119ad916992ef102b0926e95057
+      size: 339022
+    - path: data/churn/features/y_test.csv
+      hash: md5
+      md5: ceb9128b11140ba3c4c82a8273c0d2c5
+      size: 6008
+    - path: models/churn_model.pkl
+      hash: md5
+      md5: de90653054f5ff6ae40024b479e427fe
+      size: 5259969
+    - path: src/churn/model_evaluation.py
+      hash: md5
+      md5: d4d3eb77d9538ae9711b0d6124ec25c3
+      size: 3383
+    outs:
+    - path: evaluation/churn/confusion_matrix.png
+      hash: md5
+      md5: 77b68c98d2b3a79cc4119ef5a960af5a
+      size: 15849
+    - path: evaluation/churn/roc_curve.png
+      hash: md5
+      md5: 1b3e1124bba4293baa9edfe3aeaa2bf4
+      size: 27588
+    - path: metrics.json
+      hash: md5
+      md5: 9e9f6fc923c931cb6832a21e3f4286f3
+      size: 139

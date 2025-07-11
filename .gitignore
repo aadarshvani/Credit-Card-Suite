@@ -18,7 +18,7 @@ logs/
 
 # DVC cache and data outputs
 .dvc/
-dvc.lock
+
 
 # Data outputs (versioned by DVC, not Git)
 data/
@@ -41,3 +41,5 @@ Thumbs.db
 *.bak
 *.swp
 docker-compose.override.yml
+/models
+/metrics.json

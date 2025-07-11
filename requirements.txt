@@ -6,3 +6,5 @@ scikit-learn
 dvc
 python-dotenv
 imbalanced-learn
+xgboost
+mlflow

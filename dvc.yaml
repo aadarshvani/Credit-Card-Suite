@@ -12,3 +12,24 @@ stages:
     - src/churn/feature_engineering.py
     outs:
     - data/churn/features
+  train_model:
+    cmd: python src/churn/train_model.py
+    deps:
+    - data/churn/features
+    - src/churn/train_model.py
+    outs:
+    - models
+  
+  model_evaluation_churn:
+    cmd: python src/churn/model_evaluation.py
+    deps:
+      - src/churn/model_evaluation.py
+      - models/churn_model.pkl
+      - data/churn/features/X_test.csv
+      - data/churn/features/y_test.csv
+    outs:
+      - evaluation/churn/roc_curve.png
+      - evaluation/churn/confusion_matrix.png
+    metrics:
+      - metrics.json
+
