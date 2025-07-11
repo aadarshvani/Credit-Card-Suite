@@ -1,0 +1,3 @@
+model_type: 'linear_regression'
+hyperparams:
+  normalize: true

@@ -1,0 +1,14 @@
+stages:
+  data_ingestion:
+    cmd: python src/churn/data_ingestion.py
+    deps:
+    - src/churn/data_ingestion.py
+    outs:
+    - data/churn/raw
+  feature_engineering:
+    cmd: python src/churn/feature_engineering.py
+    deps:
+    - data/churn/raw
+    - src/churn/feature_engineering.py
+    outs:
+    - data/churn/features
