@@ -67,14 +67,15 @@ def apply_smote(X, y):
         exit(1)
 
 # ========== Save Outputs ==========
-def save_outputs(X_train, y_train, X_test, transformer):
+def save_outputs(X_train, y_train, X_test, y_test, transformer):
     try:
         os.makedirs('data/churn/features', exist_ok=True)
         os.makedirs('artifacts', exist_ok=True)
 
         pd.DataFrame(X_train).to_csv('data/churn/features/X_train_resampled.csv', index=False)
         pd.DataFrame(y_train, columns=['Exited']).to_csv('data/churn/features/y_train_resampled.csv', index=False)
-        pd.DataFrame(X_test).to_csv('data/churn/features/X_test_encoded.csv', index=False)
+        pd.DataFrame(X_test).to_csv('data/churn/features/X_test.csv', index=False)
+        pd.DataFrame(y_test, columns=['Exited']).to_csv('data/churn/features/y_test.csv', index=False)
 
         with open('artifacts/column_transformer.pkl', 'wb') as f:
             pickle.dump(transformer, f)
@@ -85,6 +86,7 @@ def save_outputs(X_train, y_train, X_test, transformer):
         logger.error(f"Error saving outputs: {e}")
         exit(1)
 
+
 # ========== Main ==========
 def main():
     train_df, test_df = load_data('data//churn/raw/train.csv', 'data/churn/raw/test.csv')
@@ -93,6 +95,7 @@ def main():
         X_train = train_df.drop('Exited', axis=1)
         y_train = train_df['Exited']
         X_test = test_df.drop('Exited', axis=1)
+        y_test = test_df['Exited']
     except KeyError:
         logger.error("'Exited' column not found in data.")
         exit(1)
@@ -100,7 +103,9 @@ def main():
     transformer = build_transformer(X_train)
     X_train_encoded, X_test_encoded = transform_features(transformer, X_train, X_test)
     X_train_resampled, y_train_resampled = apply_smote(X_train_encoded, y_train)
-    save_outputs(X_train_resampled, y_train_resampled, X_test_encoded, transformer)
+    
+    save_outputs(X_train_resampled, y_train_resampled, X_test_encoded, y_test, transformer)
+
 
 if __name__ == '__main__':
     main()
