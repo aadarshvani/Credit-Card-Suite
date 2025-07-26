@@ -1,0 +1,89 @@
+stages:
+  churn_data_ingestion:
+    cmd: python src/churn/data_ingestion.py
+    deps:
+      - src/churn/data_ingestion.py
+    outs:
+      - data/churn/raw/cleaned.csv
+
+  churn_feature_engineering:
+    cmd: python src/churn/feature_engineering.py
+    deps:
+      - data/churn/raw/cleaned.csv
+      - src/churn/feature_engineering.py
+    outs:
+      - data/churn/features/X_train.csv
+      - data/churn/features/y_train.csv
+      - data/churn/features/X_test.csv
+      - data/churn/features/y_test.csv
+      - artifacts/churn_transformer.pkl
+
+  churn_train_model:
+    cmd: python src/churn/train_model.py
+    deps:
+      - data/churn/features/X_train.csv
+      - data/churn/features/y_train.csv
+      - data/churn/features/X_test.csv
+      - data/churn/features/y_test.csv
+      - src/churn/train_model.py
+      - params/churn.yaml
+    params:
+      - params/churn.yaml:
+          - train_model.models
+          - train_model.cv
+          - train_model.scoring
+    outs:
+      - models/churn.pkl
+    metrics:
+      - metrics/churn_metrics.json
+
+  approval_data_ingestion:
+    cmd: python src/approval/data_ingestion.py
+    deps:
+      - src/approval/data_ingestion.py
+      - params/approval.yaml
+    outs:
+      - data/approval/raw/cleaned.csv
+
+  approval_feature_engineering:
+    cmd: python src/approval/feature_engineering.py
+    deps:
+      - data/approval/raw/cleaned.csv
+      - src/approval/feature_engineering.py
+      - params/approval.yaml
+    outs:
+      - data/approval/features/X_train.csv
+      - data/approval/features/y_train.csv
+      - data/approval/features/X_test.csv
+      - data/approval/features/y_test.csv
+      - artifacts/approval_transformer.pkl
+
+  approval_train_model:
+    cmd: python src/approval/train_model.py
+    deps:
+      - data/approval/features/X_train.csv
+      - data/approval/features/y_train.csv
+      - data/approval/features/X_test.csv
+      - data/approval/features/y_test.csv
+      - src/approval/train_model.py
+      - params/approval.yaml
+    params:
+      - params/approval.yaml:
+          - train_model.models
+          - train_model.cv
+          - train_model.scoring
+    outs:
+      - models/approval.pkl
+
+  approval_evaluate:
+    cmd: python src/approval/model_evaluation.py
+    deps:
+      - models/approval.pkl
+      - artifacts/approval_transformer.pkl
+      - data/approval/features/X_test.csv
+      - data/approval/features/y_test.csv
+      - src/approval/model_evaluation.py
+    metrics:
+      - metrics/approval_detection_metrics.json
+
+ 

@@ -1,0 +1,52 @@
+# Byte-compiled / cache / packaging
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Virtual environments
+venv/
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+
+# DVC cache and data outputs
+.dvc/
+
+# Data outputs (versioned by DVC, not Git)
+data/
+models/
+mlruns/
+artifacts/
+
+# Jupyter/IPython
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Docker
+*.bak
+*.swp
+docker-compose.override.yml
+/models
+/metrics.json
+
+# Additional best practices
+*.pkl
+*.db
+*.tmp
+*.egg-info/
+frontend/__pycache__/
+backend/__pycache__/

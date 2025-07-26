@@ -1,0 +1,227 @@
+schema: '2.0'
+stages:
+  churn_data_ingestion:
+    cmd: python src/churn/data_ingestion.py
+    deps:
+    - path: src/churn/data_ingestion.py
+      hash: md5
+      md5: 26c2e5ff98b5ac90b07da7e703857553
+      size: 718
+    outs:
+    - path: data/churn/raw/cleaned.csv
+      hash: md5
+      md5: 841582f3168391ec35daf321324007cd
+      size: 1443248
+  churn_feature_engineering:
+    cmd: python src/churn/feature_engineering.py
+    deps:
+    - path: data/churn/raw/cleaned.csv
+      hash: md5
+      md5: 841582f3168391ec35daf321324007cd
+      size: 1443248
+    - path: src/churn/feature_engineering.py
+      hash: md5
+      md5: c82c8a919ca25a7f21b94b73dce91ef1
+      size: 2314
+    outs:
+    - path: artifacts/churn_transformer.pkl
+      hash: md5
+      md5: 22a8590e81b56f8c00ae3d50e40584ef
+      size: 2425
+    - path: data/churn/features/X_test.csv
+      hash: md5
+      md5: 729b6c64804bdf08c2c3724b15d74d72
+      size: 2351633
+    - path: data/churn/features/X_train.csv
+      hash: md5
+      md5: 86c3b53aa2976fb4c89550526faf2200
+      size: 9407478
+    - path: data/churn/features/y_test.csv
+      hash: md5
+      md5: 2d06164fe796938f3564afefd9240411
+      size: 10216
+    - path: data/churn/features/y_train.csv
+      hash: md5
+      md5: a1d5f4b845d8382ee942957595b4a649
+      size: 40816
+  churn_train_model:
+    cmd: python src/churn/train_model.py
+    deps:
+    - path: data/churn/features/X_test.csv
+      hash: md5
+      md5: 729b6c64804bdf08c2c3724b15d74d72
+      size: 2351633
+    - path: data/churn/features/X_train.csv
+      hash: md5
+      md5: 86c3b53aa2976fb4c89550526faf2200
+      size: 9407478
+    - path: data/churn/features/y_test.csv
+      hash: md5
+      md5: 2d06164fe796938f3564afefd9240411
+      size: 10216
+    - path: data/churn/features/y_train.csv
+      hash: md5
+      md5: a1d5f4b845d8382ee942957595b4a649
+      size: 40816
+    - path: params/churn.yaml
+      hash: md5
+      md5: d03be2d7601f1ceaa56a082ecc70e4e0
+      size: 291
+    - path: src/churn/train_model.py
+      hash: md5
+      md5: d37cc09e52ed8092375691a221515d85
+      size: 4284
+    params:
+      params/churn.yaml:
+        train_model.cv:
+          method: stratified
+          n_splits: 5
+          shuffle: true
+          random_state: 42
+        train_model.models:
+          logistic_regression:
+            max_iter: 1000
+            random_state: 42
+          random_forest:
+            n_estimators: 100
+            max_depth: 10
+            random_state: 42
+        train_model.scoring: f1
+    outs:
+    - path: metrics/churn_metrics.json
+      hash: md5
+      md5: bd74294e93b54c846bc058ef75e8d2a4
+      size: 741
+    - path: models/churn.pkl
+      hash: md5
+      md5: dcc7ef0b9a3c8192db8f6b4e4726a15a
+      size: 981523
+  approval_data_ingestion:
+    cmd: python src/approval/data_ingestion.py
+    deps:
+    - path: params/approval.yaml
+      hash: md5
+      md5: 5502a5d28aa84f41791f2bda9496a728
+      size: 523
+    - path: src/approval/data_ingestion.py
+      hash: md5
+      md5: 44b9a77cd82ad65163958f2b52ec79bb
+      size: 951
+    outs:
+    - path: data/approval/raw/cleaned.csv
+      hash: md5
+      md5: 418f2d9e076eedf0bc3647cc677ee8f3
+      size: 101395823
+  approval_feature_engineering:
+    cmd: python src/approval/feature_engineering.py
+    deps:
+    - path: data/approval/raw/cleaned.csv
+      hash: md5
+      md5: 418f2d9e076eedf0bc3647cc677ee8f3
+      size: 101395823
+    - path: params/approval.yaml
+      hash: md5
+      md5: 5502a5d28aa84f41791f2bda9496a728
+      size: 523
+    - path: src/approval/feature_engineering.py
+      hash: md5
+      md5: da5e5134ba38b4eb1074606fc1a412ac
+      size: 2735
+    outs:
+    - path: artifacts/approval_transformer.pkl
+      hash: md5
+      md5: 8596b0e5a24c98b2c122251ccf85b7ba
+      size: 2982
+    - path: data/approval/features/X_test.csv
+      hash: md5
+      md5: 439b690eb83db08ccc48b4df1f32ed01
+      size: 283732253
+    - path: data/approval/features/X_train.csv
+      hash: md5
+      md5: cbc0975535d61d6d66896a917bd2071f
+      size: 1134940012
+    - path: data/approval/features/y_test.csv
+      hash: md5
+      md5: 92a5efb131d8aa07be787a2c625995a5
+      size: 929880
+    - path: data/approval/features/y_train.csv
+      hash: md5
+      md5: 518dc20e75b038712b97e824fb65315c
+      size: 3719472
+  approval_train_model:
+    cmd: python src/approval/train_model.py
+    deps:
+    - path: data/approval/features/X_test.csv
+      hash: md5
+      md5: 439b690eb83db08ccc48b4df1f32ed01
+      size: 283732253
+    - path: data/approval/features/X_train.csv
+      hash: md5
+      md5: cbc0975535d61d6d66896a917bd2071f
+      size: 1134940012
+    - path: data/approval/features/y_test.csv
+      hash: md5
+      md5: 92a5efb131d8aa07be787a2c625995a5
+      size: 929880
+    - path: data/approval/features/y_train.csv
+      hash: md5
+      md5: 518dc20e75b038712b97e824fb65315c
+      size: 3719472
+    - path: params/approval.yaml
+      hash: md5
+      md5: 5502a5d28aa84f41791f2bda9496a728
+      size: 523
+    - path: src/approval/train_model.py
+      hash: md5
+      md5: cf932d6ab4e4e46111963d129f1ee17b
+      size: 3095
+    params:
+      params/approval.yaml:
+        train_model.cv:
+          method: stratified
+          n_splits: 5
+          shuffle: true
+          random_state: 42
+        train_model.models:
+          logistic_regression:
+            max_iter: 1000
+            random_state: 42
+            class_weight: balanced
+          random_forest:
+            n_estimators: 100
+            random_state: 42
+            class_weight: balanced
+        train_model.scoring: recall
+    outs:
+    - path: models/approval.pkl
+      hash: md5
+      md5: 87f6e91477ffaae037a77b346c69de7a
+      size: 40968851
+  approval_evaluate:
+    cmd: python src/approval/model_evaluation.py
+    deps:
+    - path: artifacts/approval_transformer.pkl
+      hash: md5
+      md5: 8596b0e5a24c98b2c122251ccf85b7ba
+      size: 2982
+    - path: data/approval/features/X_test.csv
+      hash: md5
+      md5: 439b690eb83db08ccc48b4df1f32ed01
+      size: 283732253
+    - path: data/approval/features/y_test.csv
+      hash: md5
+      md5: 92a5efb131d8aa07be787a2c625995a5
+      size: 929880
+    - path: models/approval.pkl
+      hash: md5
+      md5: 87f6e91477ffaae037a77b346c69de7a
+      size: 40968851
+    - path: src/approval/model_evaluation.py
+      hash: md5
+      md5: b66159439da1e39f1aa82fdb31a8275f
+      size: 1432
+    outs:
+    - path: metrics/approval_detection_metrics.json
+      hash: md5
+      md5: 90dd25eab7e83e1ceffda44508f29eb0
+      size: 917

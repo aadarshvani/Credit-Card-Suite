@@ -1,0 +1,28 @@
+train_model:
+  scoring: recall
+  models:
+    logistic_regression:
+      max_iter: 1000
+      random_state: 42
+      class_weight: balanced
+    random_forest:
+      n_estimators: 100
+      random_state: 42
+      class_weight: balanced
+  cv:
+    method: stratified
+    n_splits: 5
+    shuffle: true
+    random_state: 42
+
+preprocessing:
+  smote:
+    random_state: 42
+  scaling:
+    method: standard
+  fillna: median
+  one_hot_encode: true
+  drop_columns:
+    - ID
+    - STATUS
+    - MONTHS_BALANCE
