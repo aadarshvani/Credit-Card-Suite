@@ -53,7 +53,7 @@ if submitted:
 
     with st.spinner("Making prediction..."):
         try:
-            response = requests.post("https://creditcardsuite-backend.onrender.com/api/v1/churn", json=input_data)
+            response = requests.post("https://creditcardsuite-backend-latest.onrender.com/api/v1/churn", json=input_data)
             if response.status_code == 200:
                 result = response.json()
                 prediction = result["prediction"]
