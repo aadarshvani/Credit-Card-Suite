@@ -1,14 +1,14 @@
 churn_data_ingestion:
-  source_url: "https://raw.githubusercontent.com/aadarshvani/Aadarsh-Vani-project-Datasets/refs/heads/main/Fraud_credit_card_data.csv"
+  source_url: "https://raw.githubusercontent.com/1aadarshvani/Aadarsh-Vani-project-Datasets/refs/heads/main/Fraud_credit_card_data.csv"
   test_size: 0.2
 
 approval_data_ingestion:
-  application_record_path: "https://drive.google.com/uc?id=1hj-5WNc3llLlWbfyWNcW-RD9rQrYKdg_"
-  credit_record_path: "https://drive.google.com/uc?id=1VPgaZuhhjHjjX1bwlLhSp38IMJA0plB4"
+  application_record_path: "https://drive.google.com/uc?id=1hj-5WNc3llLlWbfyWNcW-RD9rQrYKdg1_"
+  credit_record_path: "https://drive.google.com/uc?id=1VPgaZuhhjHjjX1bwlLhSp38IMJA0plB41"
   test_size: 0.2
   random_state: 42
 
 params:
   - params/churn.yaml
   - params/approval.yaml
-  - params/clv.yaml
+
